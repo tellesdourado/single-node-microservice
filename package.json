@@ -1,0 +1,14 @@
+{
+  "name": "single-node-apache-kafka",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev":"tsnd --respawn --transpile-only ./src/presentation"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.4.4"
+  }
+}
