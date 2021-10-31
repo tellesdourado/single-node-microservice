@@ -14,13 +14,15 @@ export class ConsumerService implements Service {
   ) {}
   async run(data: ConsumerConfig) {
     this.producerConsumer.consumer(data);
-    const consumerDatabase = (await this.database.createConnection()).setTable(
+    const dbConnection = await this.database.createConnection();
+    const consumerDatabase = dbConnection.setTable(
       environments.mongo.tables.consumerTable
     );
 
     const events = EventsSingleton.getInstance();
-    events.on("consumer-events", (stream) => {
-      consumerDatabase.insertOne({ rawMessage: stream });
+    events.on("consumer-events", async (stream) => {
+      const id = await consumerDatabase.insertOne({ rawMessage: stream });
+      console.info(`message: [${stream}] inserted by id: ${id}`);
     });
   }
 }

@@ -12,14 +12,20 @@ export class MongoAdapter implements Database {
     return this;
   }
 
-  insertMany?(data: any[]): Promise<string[]> {
-    throw new Error("Method not implemented.");
+  async insertMany(data: any[]): Promise<string[]> {
+    const manyInserts = await this._connection
+      .collection(this._table)
+      .insertMany(data);
+    return Object.values(manyInserts.insertedIds).map((id) => id.toString());
   }
-  findById?(id: string): Promise<any> {
-    throw new Error("Method not implemented.");
+  async findById(id: string): Promise<any> {
+    return await this._connection.collection(this._table).findOne({ _id: id });
   }
-  findByFields?(fields: AnyTypeObject): Promise<any[]> {
-    throw new Error("Method not implemented.");
+  async findByFields(fields: AnyTypeObject): Promise<any[]> {
+    return await this._connection
+      .collection(this._table)
+      .find(fields)
+      .toArray();
   }
   async createConnection(): Promise<this> {
     if (!global.database) {
@@ -32,10 +38,10 @@ export class MongoAdapter implements Database {
     return this;
   }
 
-  async insertOne(data: any) {
+  async insertOne(data: any): Promise<string> {
     const result = await this._connection
       .collection(this._table)
       .insertOne(data);
-    return result.insertedId;
+    return result.insertedId.toString();
   }
 }
