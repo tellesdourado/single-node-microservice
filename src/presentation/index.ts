@@ -1,10 +1,14 @@
 import { KafkaAdapter } from "../adapters/kafka-adapter";
+import { MongoAdapter } from "../adapters/mongo-adatper";
 import { ConsumerService } from "../services/consumer";
 import { ProducerService } from "../services/producer";
 
 const kafkaAdapter = new KafkaAdapter();
+
+const mongoAdapter = new MongoAdapter();
+
 const producer = new ProducerService(kafkaAdapter);
-const consumer = new ConsumerService(kafkaAdapter);
+const consumer = new ConsumerService(kafkaAdapter, mongoAdapter);
 
 const [, , flag, value, options] = process.argv;
 

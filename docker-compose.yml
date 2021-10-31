@@ -36,6 +36,15 @@ services:
     environment:
       KAFKA_BROKERCONNECT: kafka:9092
 
+  mongo:
+    image: mongo:5.0.2
+    restart: always
+    ports:
+     - 27017:27017
+    environment:
+     MONGO_INITDB_ROOT_USERNAME: userRoot
+     MONGO_INITDB_ROOT_PASSWORD: userPassword
+
 networks: 
   broker-kafka:
     driver: bridge  

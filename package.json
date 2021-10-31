@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@types/node": "^16.11.6",
-    "kafkajs": "^1.15.0"
+    "kafkajs": "^1.15.0",
+    "mongodb": "^4.1.3"
   }
 }

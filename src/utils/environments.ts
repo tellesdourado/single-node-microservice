@@ -7,4 +7,14 @@ export const environments = {
     ].filter(Boolean),
     groupId: process.env?.KAFKA_GROUP_ID || "TestGroup",
   },
+  mongo: {
+    username: process.env?.MONGO_USERNAME || "userRoot",
+    password: process.env?.MONGO_PASSWORD || "userPassword",
+    database: process.env?.MONGO_DATABASE_NAME || "TestDB",
+    host: process.env?.MONGO_HOST || "localhost",
+    port: process.env?.MONGO_PORT || 27017,
+    tables: {
+      consumerTable: process.env?.MONGO_CONSUMER_TABLE || "consumer-table",
+    },
+  },
 };
