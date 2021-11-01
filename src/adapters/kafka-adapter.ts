@@ -1,5 +1,6 @@
 import {
   ConsumerConfig,
+  EventType,
   ProducerConfig,
   ProducerConsumer,
 } from "../entities/producer-consumer";
@@ -14,40 +15,53 @@ export class KafkaAdapter implements ProducerConsumer {
   _consumer: Consumer;
   _events: EventEmitter;
   constructor() {
+    this._events = EventsSingleton.getInstance();
+  }
+
+  async init(type: EventType) {
     this._kafka = new Kafka({
       clientId: environments.kafka.clientId,
       brokers: environments.kafka.brokers,
       logLevel: logLevel.INFO,
     });
 
-    this._producer = this._kafka.producer();
-    this._consumer = this._kafka.consumer({
-      groupId: environments.kafka.groupId,
-    });
-    this._events = EventsSingleton.getInstance();
+    if (type == "producer") {
+      this._producer = this._kafka.producer();
+      await this._producer.connect();
+    }
+
+    if (type == "consumer") {
+      this._consumer = this._kafka.consumer({
+        groupId: environments.kafka.groupId,
+      });
+      await this._consumer.connect();
+    }
+    return this;
+  }
+
+  async disconnect(type: EventType): Promise<this> {
+    if (type == "consumer") await this._consumer.disconnect();
+
+    if (type == "producer") await this._producer.disconnect();
+
+    return this;
   }
 
   async consumer(data: ConsumerConfig): Promise<void> {
-    await this._consumer.connect();
-    console.log(data);
-
     await this._consumer.subscribe({ topic: data.topic });
-
-    console.info("Ready to Receive");
     await this._consumer.run({
       eachMessage: async ({ message }) => {
         this._events.emit("consumer-events", message.value.toString());
       },
     });
   }
+
   async producer(data: ProducerConfig): Promise<boolean> {
     const post = async (message: string) => {
-      await this._producer.connect();
       await this._producer.send({
         topic: data.topic,
         messages: [{ value: message }],
       });
-      return await this._producer.disconnect();
     };
     try {
       if (Array.isArray(data.message)) {
