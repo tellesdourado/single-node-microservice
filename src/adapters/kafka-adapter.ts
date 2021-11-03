@@ -2,14 +2,14 @@ import {
   ConsumerConfig,
   EventType,
   ProducerConfig,
-  ProducerConsumer,
-} from "../entities/producer-consumer";
+  EventIngester,
+} from "../entities/event-ingester";
 import { Consumer, Kafka, logLevel, Producer } from "kafkajs";
 import { environments } from "../utils/environments";
 import { EventEmitter } from "events";
 import { EventsSingleton } from "../utils/events-singleton";
 
-export class KafkaAdapter implements ProducerConsumer {
+export class KafkaAdapter implements EventIngester {
   _kafka: Kafka;
   _producer: Producer;
   _consumer: Consumer;

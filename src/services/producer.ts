@@ -1,12 +1,9 @@
-import {
-  ProducerConfig,
-  ProducerConsumer,
-} from "../entities/producer-consumer";
+import { ProducerConfig, EventIngester } from "../entities/event-ingester";
 import { Service } from "../entities/service";
 
 export class ProducerService implements Service {
-  constructor(private producerConsumer: ProducerConsumer) {}
+  constructor(private eventIngester: EventIngester) {}
   async run(data: ProducerConfig) {
-    return await this.producerConsumer.producer(data);
+    return await this.eventIngester.producer(data);
   }
 }

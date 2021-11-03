@@ -9,7 +9,7 @@ export interface ProducerConfig {
 
 export type EventType = "consumer" | "producer";
 
-export interface ProducerConsumer {
+export interface EventIngester {
   consumer(data: ConsumerConfig): Promise<void>;
   producer(data: ProducerConfig): Promise<boolean>;
   init(type: EventType): Promise<this>;

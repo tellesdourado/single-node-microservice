@@ -2,6 +2,8 @@ version: '3'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
+    ports:
+      - 2181:2181
     networks: 
       - broker-kafka
     environment:
@@ -34,7 +36,7 @@ services:
     ports:
       - 19000:9000
     environment:
-      KAFKA_BROKERCONNECT: localhost:9092
+      KAFKA_BROKERCONNECT: localhost:29092
 
   mongo:
     image: mongo:5.0.2

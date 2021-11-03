@@ -1,19 +1,16 @@
 import { Database } from "../entities/database";
-import {
-  ConsumerConfig,
-  ProducerConsumer,
-} from "../entities/producer-consumer";
+import { ConsumerConfig, EventIngester } from "../entities/event-ingester";
 import { Service } from "../entities/service";
 import { environments } from "../utils/environments";
 import { EventsSingleton } from "../utils/events-singleton";
 
 export class ConsumerService implements Service {
   constructor(
-    private producerConsumer: ProducerConsumer,
+    private eventIngester: EventIngester,
     private database: Database
   ) {}
   async run(data: ConsumerConfig) {
-    this.producerConsumer.consumer(data);
+    this.eventIngester.consumer(data);
     const dbConnection = await this.database.createConnection();
     const consumerDatabase = dbConnection.setTable(
       environments.mongo.tables.consumerTable
