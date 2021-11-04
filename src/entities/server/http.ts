@@ -1,5 +1,5 @@
 export interface HttpRequest {
-  params?: any;
+  params?: { [key: string]: any };
   body?: any;
 }
 

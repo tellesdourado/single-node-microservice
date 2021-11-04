@@ -1,7 +1,20 @@
-import { Router } from "express";
+import { KafkaAdapter } from "../../adapters/kafka-adapter";
+import { Route } from "../../entities/server/application";
+import { ProducerService } from "../../services/producer";
+import { ProducerController } from "../controllers/producer-controller";
 
-const route = Router();
+export async function api(): Promise<Route[]> {
+  const routes: Route[] = [];
 
-route.post("producer", (req, res) => {});
+  const producerService = new ProducerService(
+    await new KafkaAdapter().init("producer")
+  );
 
-export default route;
+  routes.push({
+    controller: new ProducerController(producerService),
+    path: "/api/producer",
+    type: "post",
+  });
+
+  return routes;
+}

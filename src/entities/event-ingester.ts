@@ -1,6 +1,6 @@
 export interface ConsumerConfig {
   topic: string;
-  quantity: number;
+  quantity?: number;
 }
 export interface ProducerConfig {
   topic: string;
