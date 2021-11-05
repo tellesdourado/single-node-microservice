@@ -12,6 +12,7 @@ export type EventType = "consumer" | "producer";
 export interface EventIngester {
   consumer(data: ConsumerConfig): Promise<void>;
   producer(data: ProducerConfig): Promise<boolean>;
+  delete(metadata: any): Promise<boolean>;
   init(type: EventType): Promise<this>;
   disconnect(type: EventType): Promise<this>;
 }

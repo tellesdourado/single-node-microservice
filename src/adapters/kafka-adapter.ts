@@ -4,7 +4,13 @@ import {
   ProducerConfig,
   EventIngester,
 } from "../entities/event-ingester";
-import { Consumer, Kafka, logLevel, Producer } from "kafkajs";
+import {
+  Consumer,
+  Kafka,
+  logLevel,
+  Producer,
+  TopicPartitionOffsetAndMetadata,
+} from "kafkajs";
 import { environments } from "../utils/environments";
 import { EventEmitter } from "events";
 import { EventsSingleton } from "../utils/events-singleton";
@@ -50,12 +56,30 @@ export class KafkaAdapter implements EventIngester {
   async consumer(data: ConsumerConfig): Promise<void> {
     await this._consumer.subscribe({ topic: data.topic });
     await this._consumer.run({
-      eachMessage: async ({ message }) => {
-        this._events.emit("consumer-events", message.value.toString());
+      autoCommit: false,
+      eachMessage: async ({ message, topic, partition }) => {
+        this._events.emit("consumer-events", {
+          message: message.value.toString(),
+          metadata: { offset: message.offset, partition, topic },
+        });
       },
     });
   }
 
+  async delete({ offset, topic, partition }: TopicPartitionOffsetAndMetadata) {
+    try {
+      await this._consumer.commitOffsets([
+        {
+          offset: (parseInt(offset) + 1).toString(),
+          topic,
+          partition,
+        },
+      ]);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
   async producer(data: ProducerConfig): Promise<boolean> {
     const post = async (message: string) => {
       await this._producer.send({

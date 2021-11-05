@@ -17,9 +17,10 @@ export class ConsumerService implements Service {
     );
 
     const events = EventsSingleton.getInstance();
-    events.on("consumer-events", async (stream) => {
-      const id = await consumerDatabase.insertOne({ rawMessage: stream });
-      console.info(`message: [${stream}] inserted by id: ${id}`);
+    events.on("consumer-events", async ({ message, metadata }) => {
+      const id = await consumerDatabase.insertOne({ rawMessage: message });
+      await this.eventIngester.delete(metadata);
+      console.info(`message: [${message}] inserted by id: ${id}`);
     });
   }
 }

@@ -6,8 +6,6 @@ import { ProducerService } from "../services/producer";
 const kafkaAdapter = new KafkaAdapter();
 const mongoAdapter = new MongoAdapter();
 
-// const [, , flag, value, options] = process.argv;
-
 export = async () => {
   const producer = new ProducerService(await kafkaAdapter.init("producer"));
   const consumer = new ConsumerService(
