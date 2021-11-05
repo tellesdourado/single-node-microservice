@@ -3,6 +3,7 @@ import {
   EventType,
   ProducerConfig,
   EventIngester,
+  ActionFunction,
 } from "../entities/event-ingester";
 import {
   Consumer,
@@ -12,17 +13,11 @@ import {
   TopicPartitionOffsetAndMetadata,
 } from "kafkajs";
 import { environments } from "../utils/environments";
-import { EventEmitter } from "events";
-import { EventsSingleton } from "../utils/events-singleton";
 
 export class KafkaAdapter implements EventIngester {
   _kafka: Kafka;
   _producer: Producer;
   _consumer: Consumer;
-  _events: EventEmitter;
-  constructor() {
-    this._events = EventsSingleton.getInstance();
-  }
 
   async init(type: EventType) {
     this._kafka = new Kafka({
@@ -53,12 +48,12 @@ export class KafkaAdapter implements EventIngester {
     return this;
   }
 
-  async consumer(data: ConsumerConfig): Promise<void> {
+  async consumer(data: ConsumerConfig, action:ActionFunction): Promise<void> {
     await this._consumer.subscribe({ topic: data.topic });
     await this._consumer.run({
       autoCommit: false,
       eachMessage: async ({ message, topic, partition }) => {
-        this._events.emit("consumer-events", {
+       action({
           message: message.value.toString(),
           metadata: { offset: message.offset, partition, topic },
         });
