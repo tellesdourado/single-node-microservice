@@ -6,13 +6,9 @@ export class LoadApplication {
   async run() {
     const app = await this.application.init();
 
-    await Promise.all(
-      (
-        await api()
-      ).map((route) => {
-        app.createRoute(route);
-      })
-    );
+    const routes = await api();
+
+    app.createRoute(routes);
 
     app.listen(3333);
   }

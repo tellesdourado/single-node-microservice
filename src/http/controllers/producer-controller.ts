@@ -1,11 +1,15 @@
-import { EventIngester } from "../../entities/event-ingester";
 import { Controller } from "../../entities/server/controller";
 import { HttpRequest, HttpResponse } from "../../entities/server/http";
 import { ProducerService } from "../../services/producer";
 
+interface Body {
+  topic: string;
+  message: string;
+}
+
 export class ProducerController implements Controller {
   constructor(private producerService: ProducerService) {}
-  async action(request: HttpRequest): Promise<HttpResponse> {
+  async action(request: HttpRequest<Body>): Promise<HttpResponse> {
     const { topic, message } = request.body;
 
     await this.producerService.run({ topic, message });

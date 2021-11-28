@@ -12,16 +12,16 @@ export class MongoAdapter implements Database {
     return this;
   }
 
-  async insertMany(data: any[]): Promise<string[]> {
+  async insertMany(data: unknown[]): Promise<string[]> {
     const manyInserts = await this._connection
       .collection(this._table)
       .insertMany(data);
     return Object.values(manyInserts.insertedIds).map((id) => id.toString());
   }
-  async findById(id: string): Promise<any> {
+  async findById(id: string): Promise<unknown> {
     return await this._connection.collection(this._table).findOne({ _id: id });
   }
-  async findByFields(fields: AnyTypeObject): Promise<any[]> {
+  async findByFields(fields: AnyTypeObject): Promise<unknown[]> {
     return await this._connection
       .collection(this._table)
       .find(fields)
@@ -38,7 +38,7 @@ export class MongoAdapter implements Database {
     return this;
   }
 
-  async insertOne(data: any): Promise<string> {
+  async insertOne(data: unknown): Promise<string> {
     const result = await this._connection
       .collection(this._table)
       .insertOne(data);

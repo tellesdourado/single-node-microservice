@@ -48,12 +48,12 @@ export class KafkaAdapter implements EventIngester {
     return this;
   }
 
-  async consumer(data: ConsumerConfig, action:ActionFunction): Promise<void> {
+  async consumer(data: ConsumerConfig, action: ActionFunction): Promise<void> {
     await this._consumer.subscribe({ topic: data.topic });
     await this._consumer.run({
       autoCommit: false,
       eachMessage: async ({ message, topic, partition }) => {
-       action({
+        action({
           message: message.value.toString(),
           metadata: { offset: message.offset, partition, topic },
         });

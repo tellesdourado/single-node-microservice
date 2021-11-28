@@ -11,8 +11,8 @@ export interface Route {
 
 export interface Application {
   init(): Promise<this>;
-  createRoute(route: Route): void;
-  request(req: unknown): HttpRequest;
+  createRoute(route: Route[]): void;
+  request(req: unknown): HttpRequest<unknown>;
   reponse(res: HttpResponse, adapterResponse: unknown): unknown;
   listen(port: number): void;
 }

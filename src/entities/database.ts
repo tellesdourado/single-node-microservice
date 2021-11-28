@@ -1,12 +1,12 @@
 export interface AnyTypeObject {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface Database {
-  insertMany?(data: any[]): Promise<string[]>;
-  findById?(id: string): Promise<any>;
-  findByFields?(fields: AnyTypeObject): Promise<any[]>;
-  insertOne?(data: any): Promise<any>;
+  insertMany?(data: unknown[]): Promise<string[]>;
+  findById?(id: string): Promise<unknown>;
+  findByFields?(fields: AnyTypeObject): Promise<unknown[]>;
+  insertOne?(data: unknown): Promise<unknown>;
   createConnection(): Promise<this>;
   setTable(name: string): this;
 }

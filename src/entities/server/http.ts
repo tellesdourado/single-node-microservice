@@ -1,9 +1,9 @@
-export interface HttpRequest {
-  params?: { [key: string]: any };
-  body?: any;
+export interface HttpRequest<T> {
+  params?: { [key: string]: unknown };
+  body?: T;
 }
 
 export interface HttpResponse {
   statusCode: number;
-  body?: any;
+  body?: unknown;
 }
