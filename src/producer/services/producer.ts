@@ -1,5 +1,8 @@
-import { ProducerConfig, EventIngester } from "../entities/event-ingester";
-import { Service } from "../entities/service";
+import {
+  ProducerConfig,
+  EventIngester,
+} from "../../app/entities/event-ingester";
+import { Service } from "../../app/entities/service";
 
 export class ProducerService implements Service {
   constructor(private eventIngester: EventIngester) {}

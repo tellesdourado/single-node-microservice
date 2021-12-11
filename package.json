@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "tsnd --respawn --transpile-only ./src/gateway",
+    "dev": "tsnd --respawn --transpile-only ./src",
     "bench": "tsnd --respawn --transpile-only ./src/bench"
   },
   "devDependencies": {

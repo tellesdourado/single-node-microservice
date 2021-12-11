@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
-import { Application, Route } from "../entities/server/application";
-import { HttpRequest, HttpResponse } from "../entities/server/http";
+import { Application, Route } from "../../entities/application";
+import { HttpRequest, HttpResponse } from "../../entities/http";
 
 export class ExpressAdapter implements Application {
   private _app: express.Express;

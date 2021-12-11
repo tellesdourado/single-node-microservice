@@ -1,6 +1,6 @@
-import { Controller } from "../../entities/server/controller";
-import { HttpRequest, HttpResponse } from "../../entities/server/http";
-import { ProducerService } from "../../services/producer";
+import { Controller } from "../app/entities/controller";
+import { ProducerService } from "./services/producer";
+import { HttpRequest, HttpResponse } from "../app/entities/http";
 
 interface Body {
   topic: string;

@@ -1,7 +1,6 @@
-import { AnyTypeObject, Database } from "../entities/database";
-
 import { Db, MongoClient } from "mongodb";
-import { environments } from "../utils/environments";
+import { AnyTypeObject, Database } from "../../entities/database";
+import { environments } from "../../../utils/environments";
 
 export class MongoAdapter implements Database {
   private _connection: Db;

@@ -1,5 +1,5 @@
-import { ExpressAdapter } from "./adapters/express-adapter";
-import { LoadApplication } from "./http/app/load-application";
+import { ExpressAdapter } from "./app/infrastructure/adapters/express-adapter";
+import { LoadApplication } from "./app/http/load-application";
 
 const expressAdapter = new ExpressAdapter();
 

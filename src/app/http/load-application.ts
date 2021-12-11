@@ -1,5 +1,5 @@
-import { Application } from "../../entities/server/application";
-import { api } from "../routes/api";
+import { Application } from "../entities/application";
+import { api } from "./routes/api";
 
 export class LoadApplication {
   constructor(private application: Application) {}

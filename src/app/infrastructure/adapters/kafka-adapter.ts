@@ -4,7 +4,7 @@ import {
   ProducerConfig,
   EventIngester,
   ActionFunction,
-} from "../entities/event-ingester";
+} from "../../../app/entities/event-ingester";
 import {
   Consumer,
   Kafka,
@@ -12,7 +12,7 @@ import {
   Producer,
   TopicPartitionOffsetAndMetadata,
 } from "kafkajs";
-import { environments } from "../utils/environments";
+import { environments } from "../../../utils/environments";
 
 export class KafkaAdapter implements EventIngester {
   _kafka: Kafka;

@@ -1,7 +1,7 @@
-import { KafkaAdapter } from "../../adapters/kafka-adapter";
-import { Route } from "../../entities/server/application";
-import { ProducerService } from "../../services/producer";
-import { ProducerController } from "../controllers/producer-controller";
+import { KafkaAdapter } from "../../infrastructure/adapters/kafka-adapter";
+import { Route } from "../../entities/application";
+import { ProducerService } from "../../../producer/services/producer";
+import { ProducerController } from "../../../producer/producer-controller";
 
 export async function api(): Promise<Route[]> {
   const routes: Route[] = [];
