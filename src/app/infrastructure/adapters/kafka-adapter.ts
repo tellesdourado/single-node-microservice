@@ -4,6 +4,7 @@ import {
   ProducerConfig,
   EventIngester,
   ActionFunction,
+  ActionParameters,
 } from "../../../app/entities/event-ingester";
 import {
   Consumer,
@@ -53,10 +54,22 @@ export class KafkaAdapter implements EventIngester {
     await this._consumer.run({
       autoCommit: false,
       eachMessage: async ({ message, topic, partition }) => {
-        action({
-          message: message.value.toString(),
-          metadata: { offset: message.offset, partition, topic },
-        });
+        try {
+          const actionParams: ActionParameters = {
+            message: message.value.toString(),
+            metadata: { offset: message.offset, partition, topic },
+          };
+          await action(actionParams);
+
+          await this.delete(
+            actionParams.metadata as TopicPartitionOffsetAndMetadata
+          );
+        } catch (error) {
+          console.log(error);
+          console.error(
+            `kafka-adapter:consumer:action - processing message error`
+          );
+        }
       },
     });
   }
@@ -70,8 +83,11 @@ export class KafkaAdapter implements EventIngester {
           partition,
         },
       ]);
+      // todo: return void
       return true;
     } catch (e) {
+      // todo: throw especific exception
+      console.log(e);
       return false;
     }
   }

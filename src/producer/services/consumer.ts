@@ -19,9 +19,8 @@ export class ConsumerService implements Service {
       environments.mongo.tables.consumerTable
     );
 
-    const action: ActionFunction = async ({ message, metadata }) => {
+    const action: ActionFunction = async ({ message }) => {
       const id = await consumerDatabase.insertOne({ rawMessage: message });
-      await this.eventIngester.delete(metadata);
       console.info(`message: [${message}] inserted by id: ${id}`);
     };
 

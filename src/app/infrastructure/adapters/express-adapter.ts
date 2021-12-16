@@ -31,7 +31,7 @@ export class ExpressAdapter implements Application {
     routes.map((route) =>
       this._app[route.type](route.path, async (req, res) => {
         const actionResponse = await route.controller.action(this.request(req));
-        return this.reponse(actionResponse, res);
+        return this.reponse(actionResponse as HttpResponse, res);
       })
     );
 

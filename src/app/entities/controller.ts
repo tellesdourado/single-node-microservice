@@ -1,5 +1,11 @@
+import { ActionParameters } from "./event-ingester";
 import { HttpRequest, HttpResponse } from "./http";
 
 export interface Controller {
-  action(request: HttpRequest<unknown>): Promise<HttpResponse>;
+  // it can be a event or http
+
+  post?: (message: string) => Promise<void>;
+  action(
+    opt: ActionParameters | HttpRequest<unknown>
+  ): Promise<void | HttpResponse>;
 }

@@ -8,15 +8,16 @@ export interface ProducerConfig {
 }
 
 export interface ActionParameters {
+  response?: unknown;
   metadata?: unknown;
   message: string;
 }
-export type ActionFunction = (parameters: ActionParameters) => void;
+export type ActionFunction = (parameters: ActionParameters) => Promise<unknown>;
 
 export type EventType = "consumer" | "producer";
 
 export interface EventIngester {
-  consumer(data: ConsumerConfig, action: ActionFunction): Promise<void>;
+  consumer(data: ConsumerConfig, action?: ActionFunction): Promise<void>;
   producer(data: ProducerConfig): Promise<boolean>;
   delete(metadata: unknown): Promise<boolean>;
   init(type: EventType): Promise<this>;
