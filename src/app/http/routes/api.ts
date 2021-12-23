@@ -1,7 +1,7 @@
 import { KafkaAdapter } from "../../infrastructure/adapters/kafka-adapter";
 import { Route } from "../../entities/application";
-import { ProducerService } from "../../../producer/services/producer";
-import { ProducerController } from "../../../producer/producer-controller";
+import { ProducerService } from "../../../payment/services/producer";
+import { PaymentController } from "../../../payment/payment-controller";
 
 export async function api(): Promise<Route[]> {
   const routes: Route[] = [];
@@ -11,8 +11,8 @@ export async function api(): Promise<Route[]> {
   );
 
   routes.push({
-    controller: new ProducerController(producerService),
-    path: "/api/producer",
+    controller: new PaymentController(producerService),
+    path: "/api/payment",
     type: "post",
   });
 

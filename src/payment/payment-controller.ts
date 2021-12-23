@@ -7,7 +7,7 @@ interface Body {
   message: string;
 }
 
-export class ProducerController implements Controller {
+export class PaymentController implements Controller {
   constructor(private producerService: ProducerService) {}
   async action(request: HttpRequest<Body>): Promise<HttpResponse> {
     const { topic, message } = request.body;
