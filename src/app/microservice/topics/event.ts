@@ -17,15 +17,12 @@ export async function events(): Promise<void> {
   // const events: Event[] = [];
 
   // paymentCtrl
-  new EventBase({
-    producer: await defaultProducer(),
-    consumer: await defaultConsumer(),
-  })
+  new EventBase()
     .route({
       from: "process.payment",
       to: "processed.payment",
     })
-    .controller(PaymentController as unknown as Controller);
+    .controller(new PaymentController());
 
   // events.push(payment);
 

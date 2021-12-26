@@ -12,7 +12,7 @@ export interface Route {
 
 export interface Event {
   route(info: Route): this;
-  producer(message: string): Promise<void>;
-  consumer(action: ActionFunction): Promise<void>;
+  post(message: string): Promise<void>;
+  get(action: ActionFunction): Promise<void>;
   controller(ctrl: Controller): void;
 }

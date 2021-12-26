@@ -1,14 +1,10 @@
 import { Controller } from "../entities/controller";
 import { Event, Route } from "../entities/event";
 import { ActionFunction, EventIngester } from "../entities/event-ingester";
-
-export interface Ingesters {
-  producer: EventIngester;
-  consumer: EventIngester;
-}
+import { MicroserviceSetup } from "./microservice-setup";
 
 export class EventBase implements Event {
-  constructor(private ingesters: Ingesters) {}
+  private event: EventIngester = MicroserviceSetup.event;
 
   private _info: Route;
 
@@ -17,17 +13,20 @@ export class EventBase implements Event {
     return this;
   }
 
-  async producer(message: string): Promise<void> {
-    await this.ingesters.producer.producer({ topic: this._info.to, message });
+  async post(message: string): Promise<void> {
+    await this.event.producer({ topic: this._info.to, message });
   }
-  async consumer(action: ActionFunction): Promise<void> {
-    await this.ingesters.consumer.consumer({ topic: this._info.from }, action);
+  async get(action: ActionFunction): Promise<void> {
+    this.post.bind(this);
+    await this.event.consumer(
+      { topic: this._info.from },
+      action,
+      this.post.bind(this)
+    );
   }
 
-  controller(ctrl: any) {
-    ctrl.post = this.producer;
-
-    this.consumer(new ctrl().action as ActionFunction);
+  controller(ctrl: Controller) {
+    this.get(ctrl.action);
     return this;
   }
 }

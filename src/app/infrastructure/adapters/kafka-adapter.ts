@@ -5,6 +5,7 @@ import {
   EventIngester,
   ActionFunction,
   ActionParameters,
+  ConsumerResponse,
 } from "../../../app/entities/event-ingester";
 import {
   Consumer,
@@ -20,24 +21,21 @@ export class KafkaAdapter implements EventIngester {
   _producer: Producer;
   _consumer: Consumer;
 
-  async init(type: EventType) {
+  async init() {
     this._kafka = new Kafka({
       clientId: environments.kafka.clientId,
       brokers: environments.kafka.brokers,
       logLevel: logLevel.INFO,
     });
 
-    if (type == "producer") {
-      this._producer = this._kafka.producer();
-      await this._producer.connect();
-    }
+    this._producer = this._kafka.producer();
+    await this._producer.connect();
 
-    if (type == "consumer") {
-      this._consumer = this._kafka.consumer({
-        groupId: environments.kafka.groupId,
-      });
-      await this._consumer.connect();
-    }
+    this._consumer = this._kafka.consumer({
+      groupId: environments.kafka.groupId,
+    });
+    await this._consumer.connect();
+
     return this;
   }
 
@@ -49,7 +47,11 @@ export class KafkaAdapter implements EventIngester {
     return this;
   }
 
-  async consumer(data: ConsumerConfig, action: ActionFunction): Promise<void> {
+  async consumer(
+    data: ConsumerConfig,
+    action: ActionFunction,
+    response: ConsumerResponse
+  ): Promise<void> {
     await this._consumer.subscribe({ topic: data.topic });
     await this._consumer.run({
       autoCommit: false,
@@ -59,7 +61,9 @@ export class KafkaAdapter implements EventIngester {
             message: message.value.toString(),
             metadata: { offset: message.offset, partition, topic },
           };
-          await action(actionParams);
+
+          const res = await action(actionParams);
+          if (res && response) await response(res);
 
           await this.delete(
             actionParams.metadata as TopicPartitionOffsetAndMetadata
