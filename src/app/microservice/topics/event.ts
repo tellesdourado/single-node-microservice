@@ -1,30 +1,11 @@
-import { PaymentController } from "../../../payment/payment-controller";
-import {
-  defaultProducer,
-  defaultConsumer,
-} from "../../../utils/ingester/default";
-import { Controller } from "../../entities/controller";
-// import { Controller } from "../../entities/controller";
-import { Event } from "../../entities/event";
-import { EventBase } from "../event-base";
-
-// interface EventController {
-//   controller: Controller;
-//   event: Event;
-// }
+import { PaymentController } from "../../../domain/payment/payment-controller";
+import { EventController } from "../config/event-controller";
 
 export async function events(): Promise<void> {
-  // const events: Event[] = [];
-
-  // paymentCtrl
-  new EventBase()
+  new EventController()
     .route({
       from: "process.payment",
       to: "processed.payment",
     })
     .controller(new PaymentController());
-
-  // events.push(payment);
-
-  // return events;
 }

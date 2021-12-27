@@ -10,9 +10,9 @@ export interface Route {
   from: string;
 }
 
-export interface Event {
-  route(info: Route): this;
-  post(message: string): Promise<void>;
-  get(action: ActionFunction): Promise<void>;
-  controller(ctrl: Controller): void;
-}
+// export interface Event {
+//   route(info: Route): this;
+//   post(message: string): Promise<void>;
+//   get(action: ActionFunction): Promise<void>;
+//   controller(ctrl: Controller): void;
+// }

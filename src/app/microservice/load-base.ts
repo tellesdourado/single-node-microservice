@@ -1,5 +1,5 @@
 import { KafkaAdapter } from "../infrastructure/adapters/kafka-adapter";
-import { MicroserviceSetup } from "./microservice-setup";
+import { MicroserviceSetup } from "./config/microservice-setup";
 import { events } from "./topics/event";
 
 export class LoadApplication {

@@ -12,7 +12,7 @@ export interface ActionParameters {
   metadata?: unknown;
   message: string;
 }
-export type ActionFunction = (parameters: ActionParameters) => Promise<string>;
+export type ActionFunction = (parameters: ActionParameters) => Promise<unknown>;
 
 export type ConsumerResponse = (message: string) => Promise<unknown>;
 

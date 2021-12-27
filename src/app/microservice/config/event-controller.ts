@@ -1,9 +1,9 @@
-import { Controller } from "../entities/controller";
-import { Event, Route } from "../entities/event";
-import { ActionFunction, EventIngester } from "../entities/event-ingester";
+import { Controller } from "../../entities/controller";
+import { Route } from "../../entities/event";
+import { ActionFunction, EventIngester } from "../../entities/event-ingester";
 import { MicroserviceSetup } from "./microservice-setup";
 
-export class EventBase implements Event {
+export class EventController {
   private event: EventIngester = MicroserviceSetup.event;
 
   private _info: Route;
@@ -17,7 +17,6 @@ export class EventBase implements Event {
     await this.event.producer({ topic: this._info.to, message });
   }
   async get(action: ActionFunction): Promise<void> {
-    this.post.bind(this);
     await this.event.consumer(
       { topic: this._info.from },
       action,
