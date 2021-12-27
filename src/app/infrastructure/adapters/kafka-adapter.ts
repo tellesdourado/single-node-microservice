@@ -63,7 +63,7 @@ export class KafkaAdapter implements EventIngester {
           };
 
           const res = await action(actionParams);
-          if (res && response) await response(res);
+          if (res && response) await response(res as string);
 
           await this.delete(
             actionParams.metadata as TopicPartitionOffsetAndMetadata

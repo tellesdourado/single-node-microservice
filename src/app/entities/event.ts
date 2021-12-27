@@ -6,7 +6,7 @@ export interface EventRequest {
 }
 
 export interface Route {
-  to: string;
+  to?: string;
   from: string;
 }
 

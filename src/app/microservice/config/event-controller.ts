@@ -14,8 +14,10 @@ export class EventController {
   }
 
   async post(message: string): Promise<void> {
+    if (!this._info.to) return;
     await this.event.producer({ topic: this._info.to, message });
   }
+
   async get(action: ActionFunction): Promise<void> {
     await this.event.consumer(
       { topic: this._info.from },
