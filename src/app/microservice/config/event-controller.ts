@@ -13,16 +13,23 @@ export class EventController {
     return this;
   }
 
-  async post(message: string): Promise<void> {
+  async post(message: string, headers: unknown): Promise<void> {
     if (!this._info.to) return;
-    await this.event.producer({ topic: this._info.to, message });
+    await this.event.producer({ topic: this._info.to, message, headers });
+  }
+
+  async dlq(message: string, headers: unknown) {
+    await this.event.producer({
+      topic: `${this._info.from}_dlq`,
+      message,
+      headers,
+    });
   }
 
   async get(action: ActionFunction): Promise<void> {
-    await this.event.consumer(
+    await this.event.consumerCtrl(
       { topic: this._info.from },
-      action,
-      this.post.bind(this)
+      { action, response: this.post.bind(this), dlq: this.dlq.bind(this) }
     );
   }
 

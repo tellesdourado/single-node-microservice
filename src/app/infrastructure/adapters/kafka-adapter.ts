@@ -6,15 +6,19 @@ import {
   ActionFunction,
   ActionParameters,
   ConsumerResponse,
+  ConsumerCtrlParams,
 } from "../../../app/entities/event-ingester";
 import {
   Consumer,
+  IHeaders,
   Kafka,
   logLevel,
   Producer,
   TopicPartitionOffsetAndMetadata,
 } from "kafkajs";
 import { environments } from "../../../utils/environments";
+import { JsonHeaderException } from "../../errors/json-header-exception";
+import { ContentTypeValidator } from "../utils/content-type-validator";
 
 export class KafkaAdapter implements EventIngester {
   _kafka: Kafka;
@@ -47,32 +51,51 @@ export class KafkaAdapter implements EventIngester {
     return this;
   }
 
-  async consumer(
+  async consumer(data: ConsumerConfig, action: ActionFunction): Promise<void> {
+    await this._consumer.subscribe({ topic: data.topic });
+    await this._consumer.run({
+      autoCommit: false,
+      eachMessage: async ({ message, topic, partition }) => {
+        await action({
+          message: message.value.toString(),
+        });
+        await this.delete({ offset: message.offset, partition, topic });
+      },
+    });
+  }
+
+  async consumerCtrl(
     data: ConsumerConfig,
-    action: ActionFunction,
-    response: ConsumerResponse
+    params: ConsumerCtrlParams
   ): Promise<void> {
     await this._consumer.subscribe({ topic: data.topic });
     await this._consumer.run({
       autoCommit: false,
       eachMessage: async ({ message, topic, partition }) => {
         try {
-          const actionParams: ActionParameters = {
-            message: message.value.toString(),
-            metadata: { offset: message.offset, partition, topic },
-          };
-
-          const res = await action(actionParams);
-          if (res && response) await response(res as string);
-
-          await this.delete(
-            actionParams.metadata as TopicPartitionOffsetAndMetadata
+          const actionParams = ContentTypeValidator.json(
+            message.value.toString(),
+            message.headers
           );
+
+          const responseData = await params.action(actionParams);
+
+          if (responseData && params.response)
+            await params.response(
+              JSON.stringify(responseData),
+              actionParams.headers
+            );
+
+          await this.delete({ offset: message.offset, partition, topic });
         } catch (error) {
-          console.log(error);
-          console.error(
-            `kafka-adapter:consumer:action - processing message error`
-          );
+          if (error instanceof JsonHeaderException) {
+            await params.dlq(message.value.toString(), message.headers);
+            await this.delete({
+              offset: message.offset,
+              partition,
+              topic,
+            });
+          }
         }
       },
     });
@@ -95,28 +118,10 @@ export class KafkaAdapter implements EventIngester {
       return false;
     }
   }
-  async producer(data: ProducerConfig): Promise<boolean> {
-    const post = async (message: string) => {
-      await this._producer.send({
-        topic: data.topic,
-        messages: [{ value: message }],
-      });
-    };
-    try {
-      if (Array.isArray(data.message)) {
-        await Promise.all(
-          data.message.map(async (value) => {
-            return await post(value);
-          })
-        );
-      }
-
-      if (typeof data.message === "string") {
-        await post(data.message);
-      }
-      return true;
-    } catch (e) {
-      throw new Error(e);
-    }
+  async producer(data: ProducerConfig): Promise<void> {
+    await this._producer.send({
+      topic: data.topic,
+      messages: [{ value: data.message, headers: data.headers as IHeaders }],
+    });
   }
 }
