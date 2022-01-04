@@ -12,7 +12,7 @@ export class ContentTypeValidator {
       return {
         message: JSON.parse(value.toString()),
         header: { [this.ct]: "application/json" },
-      } as ActionParameters;
+      } as ActionParameters<string>;
     } else {
       throw new JsonHeaderException(`the message should be a json object`);
     }

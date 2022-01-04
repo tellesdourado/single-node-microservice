@@ -1,5 +1,5 @@
 import { Controller } from "../../../app/contracts/controller";
-import { Route } from "../../../app/contracts/event";
+import { Route } from "../../contracts/routes";
 import {
   ActionFunction,
   EventIngester,

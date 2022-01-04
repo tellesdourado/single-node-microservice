@@ -12,11 +12,13 @@ export interface Headers {
   [key: string]: string;
 }
 
-export interface ActionParameters {
+export interface ActionParameters<T> {
   headers?: unknown;
-  message: string;
+  message: T;
 }
-export type ActionFunction = (parameters: ActionParameters) => Promise<unknown>;
+export type ActionFunction = (
+  parameters: ActionParameters<unknown>
+) => Promise<unknown>;
 
 export type ConsumerResponse = (
   message: string,
