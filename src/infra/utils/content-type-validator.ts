@@ -1,5 +1,5 @@
-import { ActionParameters } from "../../entities/event-ingester";
-import { JsonHeaderException } from "../../errors/json-header-exception";
+import { ActionParameters } from "../adapters/contracts/event-ingester";
+import { JsonHeaderException } from "../../app/errors/json-header-exception";
 
 interface Header {
   [key: string]: string | Buffer;

@@ -1,6 +1,9 @@
-import { Controller } from "../../entities/controller";
-import { Route } from "../../entities/event";
-import { ActionFunction, EventIngester } from "../../entities/event-ingester";
+import { Controller } from "../../../app/contracts/controller";
+import { Route } from "../../../app/contracts/event";
+import {
+  ActionFunction,
+  EventIngester,
+} from "../../../infra/adapters/contracts/event-ingester";
 import { MicroserviceSetup } from "./microservice-setup";
 
 export class EventController {

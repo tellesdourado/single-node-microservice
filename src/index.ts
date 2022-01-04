@@ -1,3 +1,3 @@
-import { LoadApplication } from "./app/microservice/load-base";
+import { LoadApplication } from "./kernel/microservice/load-base";
 
 new LoadApplication().run();

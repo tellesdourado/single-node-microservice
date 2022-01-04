@@ -5,7 +5,7 @@ import {
   EventIngester,
   ActionFunction,
   ConsumerCtrlParams,
-} from "../../../app/entities/event-ingester";
+} from "../contracts/event-ingester";
 import {
   Consumer,
   IHeaders,
@@ -15,8 +15,8 @@ import {
   TopicPartitionOffsetAndMetadata,
 } from "kafkajs";
 import { environments } from "../../../utils/environments";
-import { JsonHeaderException } from "../../errors/json-header-exception";
-import { ContentTypeValidator } from "../utils/content-type-validator";
+import { JsonHeaderException } from "../../../app/errors/json-header-exception";
+import { ContentTypeValidator } from "../../utils/content-type-validator";
 
 export class KafkaAdapter implements EventIngester {
   _kafka: Kafka;

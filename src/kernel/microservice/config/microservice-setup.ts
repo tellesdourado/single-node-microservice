@@ -1,4 +1,4 @@
-import { EventIngester } from "../../entities/event-ingester";
+import { EventIngester } from "../../../infra/adapters/contracts/event-ingester";
 
 export class MicroserviceSetup {
   public static event: EventIngester;

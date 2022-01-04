@@ -1,5 +1,5 @@
-import { Controller } from "../../app/entities/controller";
-import { ActionParameters } from "../../app/entities/event-ingester";
+import { Controller } from "../../contracts/controller";
+import { ActionParameters } from "../../../infra/adapters/contracts/event-ingester";
 
 export class PaymentController implements Controller {
   async action({ message }: ActionParameters): Promise<string> {
