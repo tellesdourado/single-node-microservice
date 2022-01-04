@@ -4,8 +4,6 @@ import {
   ProducerConfig,
   EventIngester,
   ActionFunction,
-  ActionParameters,
-  ConsumerResponse,
   ConsumerCtrlParams,
 } from "../../../app/entities/event-ingester";
 import {
@@ -102,22 +100,15 @@ export class KafkaAdapter implements EventIngester {
   }
 
   async delete({ offset, topic, partition }: TopicPartitionOffsetAndMetadata) {
-    try {
-      await this._consumer.commitOffsets([
-        {
-          offset: (parseInt(offset) + 1).toString(),
-          topic,
-          partition,
-        },
-      ]);
-      // todo: return void
-      return true;
-    } catch (e) {
-      // todo: throw especific exception
-      console.log(e);
-      return false;
-    }
+    await this._consumer.commitOffsets([
+      {
+        offset: (parseInt(offset) + 1).toString(),
+        topic,
+        partition,
+      },
+    ]);
   }
+
   async producer(data: ProducerConfig): Promise<void> {
     await this._producer.send({
       topic: data.topic,
