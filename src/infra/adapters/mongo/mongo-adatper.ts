@@ -1,5 +1,4 @@
 import { Db, MongoClient } from "mongodb";
-import { environments } from "../../../utils/environments";
 import { AnyTypeObject, Database } from "../contracts/database";
 
 export class MongoAdapter implements Database {
@@ -29,9 +28,9 @@ export class MongoAdapter implements Database {
   async createConnection(): Promise<this> {
     if (!global.database) {
       const conn = await MongoClient.connect(
-        `mongodb://${environments.mongo.username}:${environments.mongo.password}@${environments.mongo.host}:${environments.mongo.port}`
+        `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`
       );
-      global.connection = conn.db(environments.mongo.database);
+      global.connection = conn.db(process.env.MONGO_DATABASE_NAME);
     }
     this._connection = global.connection;
     return this;

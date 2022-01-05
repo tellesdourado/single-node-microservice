@@ -1,3 +1,4 @@
+import { EnvManager } from "../../../infra/adapters/contracts/env-manager";
 import { EventIngester } from "../../../infra/adapters/contracts/event-ingester";
 
 export class MicroserviceSetup {
@@ -5,6 +6,10 @@ export class MicroserviceSetup {
 
   constructor() {
     throw new Error(`this class cant be initialized`);
+  }
+
+  static async setEnv(envManager: EnvManager) {
+    await envManager.init();
   }
 
   static setIngester(ingester: EventIngester) {

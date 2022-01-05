@@ -14,7 +14,7 @@ import {
   Producer,
   TopicPartitionOffsetAndMetadata,
 } from "kafkajs";
-import { environments } from "../../../utils/environments";
+
 import { JsonHeaderException } from "../../../app/errors/json-header-exception";
 import { ContentTypeValidator } from "../../utils/content-type-validator";
 
@@ -25,8 +25,8 @@ export class KafkaAdapter implements EventIngester {
 
   async init() {
     this._kafka = new Kafka({
-      clientId: environments.kafka.clientId,
-      brokers: environments.kafka.brokers,
+      clientId: process.env.KAFKA_CLIENT_ID,
+      brokers: process.env.KAFKA_BROKERS.split(",").filter(Boolean),
       logLevel: logLevel.INFO,
     });
 
@@ -34,7 +34,7 @@ export class KafkaAdapter implements EventIngester {
     await this._producer.connect();
 
     this._consumer = this._kafka.consumer({
-      groupId: environments.kafka.groupId,
+      groupId: process.env.KAFKA_GROUP_ID,
     });
     await this._consumer.connect();
 

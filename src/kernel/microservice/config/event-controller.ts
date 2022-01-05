@@ -5,11 +5,13 @@ import {
   EventIngester,
 } from "../../../infra/adapters/contracts/event-ingester";
 import { MicroserviceSetup } from "./microservice-setup";
+import { Class } from "../../../app/contracts/dto";
 
 export class EventController {
   private event: EventIngester = MicroserviceSetup.event;
-
   private _info: Route;
+
+  constructor(private dto?: Class) {}
 
   route(info: Route) {
     this._info = info;
