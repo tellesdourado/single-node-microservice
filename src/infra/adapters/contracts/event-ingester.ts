@@ -1,3 +1,5 @@
+import { GenericClass } from "../../../app/contracts/generic-class";
+
 export interface ConsumerConfig {
   topic: string;
   quantity?: number;
@@ -14,7 +16,7 @@ export interface Headers {
 
 export interface ActionParameters<T> {
   headers?: unknown;
-  message: T;
+  data: T;
 }
 export type ActionFunction = (
   parameters: ActionParameters<unknown>
@@ -29,6 +31,7 @@ export interface ConsumerCtrlParams {
   action: ActionFunction;
   response: ConsumerResponse;
   dlq: ConsumerResponse;
+  dto?: GenericClass;
 }
 
 export type ConsumerCtrl = (params: ConsumerCtrlParams) => Promise<void>;

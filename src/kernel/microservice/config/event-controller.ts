@@ -5,13 +5,13 @@ import {
   EventIngester,
 } from "../../../infra/adapters/contracts/event-ingester";
 import { MicroserviceSetup } from "./microservice-setup";
-import { Class } from "../../../app/contracts/dto";
+import { GenericClass } from "../../../app/contracts/generic-class";
 
 export class EventController {
   private event: EventIngester = MicroserviceSetup.event;
   private _info: Route;
 
-  constructor(private dto?: Class) {}
+  constructor(private dto?: GenericClass) {}
 
   route(info: Route) {
     this._info = info;
@@ -34,7 +34,12 @@ export class EventController {
   async get(action: ActionFunction): Promise<void> {
     await this.event.consumerCtrl(
       { topic: this._info.from },
-      { action, response: this.post.bind(this), dlq: this.dlq.bind(this) }
+      {
+        action,
+        response: this.post.bind(this),
+        dlq: this.dlq.bind(this),
+        dto: this.dto,
+      }
     );
   }
 

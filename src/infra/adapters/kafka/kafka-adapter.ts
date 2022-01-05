@@ -15,8 +15,8 @@ import {
   TopicPartitionOffsetAndMetadata,
 } from "kafkajs";
 
-import { JsonHeaderException } from "../../../app/errors/json-header-exception";
-import { ContentTypeValidator } from "../../utils/content-type-validator";
+import { JsonHeaderException } from "./errors/json-header-exception";
+import { ContentTypeValidator } from "./helpers/content-type-validator";
 
 export class KafkaAdapter implements EventIngester {
   _kafka: Kafka;
@@ -55,7 +55,7 @@ export class KafkaAdapter implements EventIngester {
       autoCommit: false,
       eachMessage: async ({ message, topic, partition }) => {
         await action({
-          message: message.value.toString(),
+          data: message.value.toString(),
         });
         await this.delete({ offset: message.offset, partition, topic });
       },
@@ -73,7 +73,8 @@ export class KafkaAdapter implements EventIngester {
         try {
           const actionParams = ContentTypeValidator.json(
             message.value.toString(),
-            message.headers
+            message.headers,
+            params.dto
           );
 
           const responseData = await params.action(actionParams);
