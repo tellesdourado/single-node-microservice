@@ -32,7 +32,7 @@ export class EventController {
   }
 
   async get(action: ActionFunction): Promise<void> {
-    await this.event.consumerCtrl(
+    await this.event.controller(
       { topic: this._info.from },
       {
         action,

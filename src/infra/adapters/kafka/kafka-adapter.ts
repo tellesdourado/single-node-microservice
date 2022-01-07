@@ -4,7 +4,6 @@ import {
   ProducerConfig,
   EventIngester,
   ActionFunction,
-  ConsumerCtrlParams,
 } from "../contracts/event-ingester";
 import {
   Consumer,
@@ -14,9 +13,6 @@ import {
   Producer,
   TopicPartitionOffsetAndMetadata,
 } from "kafkajs";
-
-import { JsonHeaderException } from "./errors/json-header-exception";
-import { ContentTypeValidator } from "./helpers/content-type-validator";
 
 export class KafkaAdapter implements EventIngester {
   _kafka: Kafka;
@@ -58,44 +54,6 @@ export class KafkaAdapter implements EventIngester {
           data: message.value.toString(),
         });
         await this.delete({ offset: message.offset, partition, topic });
-      },
-    });
-  }
-
-  async consumerCtrl(
-    data: ConsumerConfig,
-    params: ConsumerCtrlParams
-  ): Promise<void> {
-    await this._consumer.subscribe({ topic: data.topic });
-    await this._consumer.run({
-      autoCommit: false,
-      eachMessage: async ({ message, topic, partition }) => {
-        try {
-          const actionParams = ContentTypeValidator.json(
-            message.value.toString(),
-            message.headers,
-            params.dto
-          );
-
-          const responseData = await params.action(actionParams);
-
-          if (responseData && params.response)
-            await params.response(
-              JSON.stringify(responseData),
-              actionParams.headers
-            );
-
-          await this.delete({ offset: message.offset, partition, topic });
-        } catch (error) {
-          if (error instanceof JsonHeaderException) {
-            await params.dlq(message.value.toString(), message.headers);
-            await this.delete({
-              offset: message.offset,
-              partition,
-              topic,
-            });
-          }
-        }
       },
     });
   }
