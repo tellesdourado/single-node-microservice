@@ -38,11 +38,14 @@ export type ConsumerCtrl = (params: ConsumerCtrlParams) => Promise<void>;
 
 export type EventType = "consumer" | "producer";
 
-export interface EventIngester {
-  consumer(data: ConsumerConfig, action?: ActionFunction): Promise<void>;
-  controller?(data: ConsumerConfig, params: ConsumerCtrlParams): Promise<void>;
-  producer(data: ProducerConfig): Promise<void>;
-  delete(metadata: unknown): Promise<void>;
-  init(type: EventType): Promise<this>;
-  disconnect(type: EventType): Promise<this>;
+export abstract class EventIngester {
+  consumer: (data: ConsumerConfig, action?: ActionFunction) => Promise<void>;
+  controller?: (
+    data: ConsumerConfig,
+    params: ConsumerCtrlParams
+  ) => Promise<void>;
+  producer: (data: ProducerConfig) => Promise<void>;
+  delete: (metadata: unknown) => Promise<void>;
+  init: (type: EventType) => Promise<this>;
+  disconnect: (type: EventType) => Promise<this>;
 }

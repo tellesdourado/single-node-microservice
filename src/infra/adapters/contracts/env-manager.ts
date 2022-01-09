@@ -1,3 +1,3 @@
-export interface EnvManager {
-  init(): Promise<void>;
+export abstract class EnvManager {
+  init: () => Promise<this>;
 }

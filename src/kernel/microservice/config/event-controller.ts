@@ -4,11 +4,11 @@ import {
   ActionFunction,
   EventIngester,
 } from "../../../infra/adapters/contracts/event-ingester";
-import { MicroserviceSetup } from "./microservice-setup";
+import { ProjectSetup } from "./project-setup";
 import { GenericClass } from "../../../app/contracts/generic-class";
 
 export class EventController {
-  private event: EventIngester = MicroserviceSetup.event;
+  private event: EventIngester = ProjectSetup.find(EventIngester.name);
   private _info: Route;
 
   constructor(private dto?: GenericClass) {}
