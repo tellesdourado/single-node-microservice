@@ -1,3 +1,4 @@
+import { NotValidDtoException } from "../../errors/validator/not-valid-dto-exception";
 import {
   ConsumerConfig,
   ConsumerCtrlParams,
@@ -16,7 +17,7 @@ export class KafkaControllerAdapter extends KafkaAdapter {
       autoCommit: false,
       eachMessage: async ({ message, topic, partition }) => {
         try {
-          const actionParams = ContentTypeValidator.json(
+          const actionParams = await ContentTypeValidator.json(
             message.value.toString(),
             message.headers,
             params.dto
@@ -32,7 +33,7 @@ export class KafkaControllerAdapter extends KafkaAdapter {
 
           await this.delete({ offset: message.offset, partition, topic });
         } catch (error) {
-          if (error instanceof JsonHeaderException) {
+          if (error instanceof JsonHeaderException || NotValidDtoException) {
             await params.dlq(message.value.toString(), message.headers);
             await this.delete({
               offset: message.offset,
