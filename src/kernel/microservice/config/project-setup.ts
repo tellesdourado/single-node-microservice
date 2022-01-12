@@ -4,9 +4,7 @@ interface Component {
 
 export class ProjectSetup {
   private static components: Component = {};
-
-  private constructor() {}
-
+  constructor() {}
   public static register(name: string, cls: unknown) {
     this.components[name] = cls;
   }
