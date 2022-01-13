@@ -1,6 +1,3 @@
-import { GenericClass } from "../../../app/contracts/generic-class";
-import { DtoValidator } from "../../../kernel/contracts/dto-validator";
-
 export interface ConsumerConfig {
   topic: string;
   quantity?: number;
@@ -32,7 +29,7 @@ export interface ConsumerCtrlParams {
   action: ActionFunction;
   response: ConsumerResponse;
   dlq: ConsumerResponse;
-  dto?: FunctionConstructor;
+  dto?: unknown;
 }
 
 export type ConsumerCtrl = (params: ConsumerCtrlParams) => Promise<void>;

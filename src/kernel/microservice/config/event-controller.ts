@@ -8,7 +8,7 @@ import { ProjectSetup } from "./project-setup";
 import { GenericClass } from "../../../app/contracts/generic-class";
 
 export class EventController {
-  private event: EventIngester = ProjectSetup.find(EventIngester.name);
+  private event: EventIngester = ProjectSetup.retrieve(EventIngester.name);
   private _info: Route;
 
   constructor(private dto?: GenericClass) {}
@@ -44,7 +44,7 @@ export class EventController {
   }
 
   controller(ctrl: Controller) {
-    this.get(ctrl.action);
+    this.get(ctrl.action.bind(ctrl));
     return this;
   }
 }

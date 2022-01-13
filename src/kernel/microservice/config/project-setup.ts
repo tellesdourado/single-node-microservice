@@ -9,7 +9,7 @@ export class ProjectSetup {
     this.components[name] = cls;
   }
 
-  public static find<T>(name: string) {
+  public static retrieve<T>(name: string) {
     return this.components[name] as T;
   }
 }

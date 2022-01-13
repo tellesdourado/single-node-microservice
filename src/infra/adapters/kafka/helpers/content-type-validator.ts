@@ -1,6 +1,5 @@
 import { JsonHeaderException } from "../errors/json-header-exception";
 import { ActionParameters } from "../../contracts/event-ingester";
-import { GenericClass } from "../../../../app/contracts/generic-class";
 import { DtoValidator } from "../../../../kernel/contracts/dto-validator";
 
 interface Header {
@@ -22,7 +21,7 @@ export class ContentTypeValidator {
         JSON.parse(value.toString(), (key, value) => {
           if (key) data[key] = value;
         });
-        await (data as DtoValidator).validate();
+        await (data as DtoValidator)?.validate();
       }
 
       return {

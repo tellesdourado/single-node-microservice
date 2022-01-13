@@ -1,44 +1,41 @@
 import { Db, MongoClient } from "mongodb";
-import { AnyTypeObject, Database } from "../contracts/database";
+import { Database } from "../contracts/database";
 
 export class MongoAdapter implements Database {
   private _connection: Db;
-  private _table: string;
+  private _collection: string;
 
-  setTable(table: string): this {
-    this._table = table;
+  collection(collection: string): this {
+    this._collection = collection;
     return this;
   }
 
+  find: (fields: Record<string, unknown>) => Promise<unknown[]>;
+
   async insertMany(data: unknown[]): Promise<string[]> {
     const manyInserts = await this._connection
-      .collection(this._table)
+      .collection(this._collection)
       .insertMany(data);
     return Object.values(manyInserts.insertedIds).map((id) => id.toString());
   }
   async findById(id: string): Promise<unknown> {
-    return await this._connection.collection(this._table).findOne({ _id: id });
-  }
-  async findByFields(fields: AnyTypeObject): Promise<unknown[]> {
     return await this._connection
-      .collection(this._table)
-      .find(fields)
-      .toArray();
+      .collection(this._collection)
+      .findOne({ _id: id });
   }
-  async createConnection(): Promise<this> {
-    if (!global.database) {
-      const conn = await MongoClient.connect(
-        `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`
-      );
-      global.connection = conn.db(process.env.MONGO_DATABASE_NAME);
-    }
-    this._connection = global.connection;
+
+  async init(): Promise<this> {
+    const conn = await MongoClient.connect(
+      `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`
+    );
+
+    this._connection = conn.db(process.env.MONGO_DATABASE_NAME);
     return this;
   }
 
-  async insertOne(data: unknown): Promise<string> {
+  async insertOne(data: object): Promise<string> {
     const result = await this._connection
-      .collection(this._table)
+      .collection(this._collection)
       .insertOne(data);
     return result.insertedId.toString();
   }

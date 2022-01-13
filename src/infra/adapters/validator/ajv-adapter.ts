@@ -8,7 +8,7 @@ export class AjvValidator implements Validator {
   async validate(className: string, object: object): Promise<void> {
     const validator = new Ajv();
     const schema: Schema = {
-      ...RegisterValidation.find<object>(className),
+      ...RegisterValidation.retrieve<object>(className),
       ...ajvAdditionalInfo,
     };
     console.log(schema);
