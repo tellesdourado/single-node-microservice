@@ -9,8 +9,8 @@ import { AjvValidator } from "../../infra/adapters/validator/ajv-adapter";
 import { ProjectSetup } from "./config/project-setup";
 import { routes } from "./topics/routes";
 
-export class LoadApplication {
-  static async run() {
+export class Application {
+  static async load() {
     ProjectSetup.register(
       EnvManager.name,
       await new EnvManagerAdapter().init()

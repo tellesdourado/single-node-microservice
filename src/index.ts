@@ -1,3 +1,3 @@
-import { LoadApplication } from "./kernel/microservice/load-application";
+import { Application } from "./kernel/microservice/application";
 
-LoadApplication.run();
+Application.load();
