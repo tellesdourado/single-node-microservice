@@ -1,5 +1,5 @@
 import { JsonHeaderException } from "../errors/json-header-exception";
-import { ActionParameters } from "../../contracts/event-ingester";
+import { ActionParameters } from "../../contracts/event-ingestion";
 import { DtoValidator } from "../../../../kernel/contracts/dto-validator";
 
 interface Header {

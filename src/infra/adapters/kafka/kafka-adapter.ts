@@ -2,9 +2,9 @@ import {
   ConsumerConfig,
   EventType,
   ProducerConfig,
-  EventIngester,
+  EventIngestion,
   ActionFunction,
-} from "../contracts/event-ingester";
+} from "../contracts/event-ingestion";
 import {
   Consumer,
   IHeaders,
@@ -14,7 +14,7 @@ import {
   TopicPartitionOffsetAndMetadata,
 } from "kafkajs";
 
-export class KafkaAdapter implements EventIngester {
+export class KafkaAdapter implements EventIngestion {
   _kafka: Kafka;
   _producer: Producer;
   _consumer: Consumer;

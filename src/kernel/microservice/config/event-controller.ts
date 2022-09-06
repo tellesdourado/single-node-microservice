@@ -2,13 +2,13 @@ import { Controller } from "../../../app/contracts/controller";
 import { Route } from "../../contracts/routes";
 import {
   ActionFunction,
-  EventIngester,
-} from "../../../infra/adapters/contracts/event-ingester";
+  EventIngestion,
+} from "../../../infra/adapters/contracts/event-ingestion";
 import { ProjectSetup } from "./project-setup";
 import { GenericClass } from "../../../app/contracts/generic-class";
 
 export class EventController {
-  private event: EventIngester = ProjectSetup.retrieve(EventIngester.name);
+  private event: EventIngestion = ProjectSetup.retrieve(EventIngestion.name);
   private _info: Route;
 
   constructor(private dto?: GenericClass) {}

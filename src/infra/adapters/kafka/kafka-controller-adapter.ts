@@ -2,7 +2,7 @@ import { NotValidDtoException } from "../../errors/validator/not-valid-dto-excep
 import {
   ConsumerConfig,
   ConsumerCtrlParams,
-} from "../contracts/event-ingester";
+} from "../contracts/event-ingestion";
 import { JsonHeaderException } from "./errors/json-header-exception";
 import { ContentTypeValidator } from "./helpers/content-type-validator";
 import { KafkaAdapter } from "./kafka-adapter";

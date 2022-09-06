@@ -36,7 +36,7 @@ export type ConsumerCtrl = (params: ConsumerCtrlParams) => Promise<void>;
 
 export type EventType = "consumer" | "producer";
 
-export abstract class EventIngester {
+export abstract class EventIngestion {
   consumer: (data: ConsumerConfig, action?: ActionFunction) => Promise<void>;
   controller?: (
     data: ConsumerConfig,

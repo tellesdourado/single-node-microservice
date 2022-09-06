@@ -1,5 +1,5 @@
 import { Controller } from "../../contracts/controller";
-import { ActionParameters } from "../../../infra/adapters/contracts/event-ingester";
+import { ActionParameters } from "../../../infra/adapters/contracts/event-ingestion";
 import { ExampleDto } from "../../dtos/example/example-dto";
 import { Database } from "../../../infra/adapters/contracts/database";
 
